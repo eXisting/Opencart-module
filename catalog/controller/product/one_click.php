@@ -236,6 +236,12 @@ class ControllerProductOneClick extends Controller {
             'symbolRight'                   => $data['symbolRight']
             );
 
+
+        //Write to db
+        $this->load->model('catalog/one_click');
+        
+        $inner_email_id = $this->model_catalog_one_click->addOrder($this->request->post);
+        
         // Get the main message template
         if (VERSION >= '2.2.0.0') {
           $mail_message =  $this->load->view('mail/one_click_mail_msg', $mail_tmpl_data);
