@@ -92,11 +92,7 @@
 </div>
 
 <script>
-    // Calc the price value
-    function priceCalc(val){
-        $('#total-price<?php echo $product_id;?>').text(val*<?php echo $price;?>)
-    }
-
+    
     $('#bs-one_click<?php echo $product_id?>').modal('show');
     $('#btn_submit<?php echo $product_id;?>').on('click', function() {
 
