@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<name>One click order addon</name>
+	<code>oneclick</code>
+	<version>1.0</version>
+	<author>Andrey Popazov</author>
+
+	<!-- Product modification -->
+    <file path="catalog/view/theme/*/template/product/product.tpl">
+        <operation>
+            <search><![CDATA[<button type="button" id="button-cart" data-loading-text="<?php echo $text_loading; ?>" class="btn btn-primary btn-lg btn-block"><?php echo $button_cart; ?></button>]]>
+            </search>
+            <add position="before"><![CDATA[
+                            <!-- Button one_click -->
+                            <?php  echo $one_click;?>
+                            <!-- END :  button one_click -->
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+	<!-- Adding the one_click product controller -->
+	<file path="catalog/controller/product/product.php">
+		<operation>
+			<search><![CDATA[
+           $this->model_catalog_product->updateViewed($this->request->get['product_id']);
+				]]></search>
+			<add position="after"><![CDATA[
+$data['one_click'] = $this->load->controller('product/one_click', $product_info); // one_click Button
+
+		]]></add>
+		</operation>
+	</file>
+
+
+
+    <!-- Product category modification -->
+    <file path="catalog/view/theme/*/template/product/category.tpl">
+        <operation>
+            <search><![CDATA[<div class="button-group">]]>
+            </search>
+            <add position="before"><![CDATA[
+              <!-- Button one_click -->
+              <div class="button-gruop">
+                <?php echo $product['one_click']; ?>
+              </div><!-- END :  button one_click -->
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/product/category.php">
+
+        <!-- For OpenCart version 2.2.0.0 or later  -->
+        <operation>
+            <search><![CDATA[
+            'rating'      => $result['rating'],
+                ]]></search>
+            <add position="after"><![CDATA[
+                    'one_click'     => $this->load->controller('product/one_click', $product_info = $this->model_catalog_product->getProduct( isset($result['product_id']) ? $result['product_id'] :'' )), // one_click
+        ]]></add>
+        </operation>
+
+        <!-- For OpenCart version under 2.2.0.0  -->
+        <operation>
+            <search><![CDATA[
+            if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/product/category.tpl'))
+                ]]></search>
+            <add position="before"><![CDATA[
+            $data['one_click'] = $this->load->controller('product/one_click', $product_info = $this->model_catalog_product->getProduct($result['product_id'])); // one_click
+        ]]></add>
+        </operation>
+    </file>
+
+
+
+
+	<!-- Adding the one_click launch script -->
+	<file path="catalog/view/theme/*/template/common/footer.tpl">
+		<operation>
+			<search><![CDATA[</body>]]>
+			</search>
+			<add position="before"><![CDATA[
+    <script>
+      function showForm(data){
+        $.ajax({
+          url: 'index.php?route=product/one_click/getForm',
+          type: 'post',
+          data: {
+            product_name: data['product_name']
+            , price: data['price'] 
+            , product_id: data['product_id']
+            , product_link: data['product_link']
+          },
+
+          beforeSend: function() {
+          },
+          complete: function() {
+          },
+          success: function(result) {
+            $('#one_click-form-container'+data['product_id']).html(result);
+          },
+          error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+          }
+        });
+    };
+    </script>
+			]]>
+			</add>
+		</operation>
+	</file>
+
+<!-- Admin modifications -->
+
+
+<!-- Manu variable initialize -->
+    <file path="admin/controller/common/menu.php">
+        <operation>
+            <search><![CDATA[
+            	$data['information'] = $this->url->link('catalog/information', 'token=' . $this->session->data['token'], 'SSL');
+            	]]>
+            </search>
+            <add position="before"><![CDATA[
+                            // One click order --
+                            $data['emails_list'] = $this->url->link('catalog/emails_list', 'token=' . $this->session->data['token'], 'SSL');
+                            // One click order --
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <!-- Manu variable view -->
+    <file path="admin/view/template/common/menu.tpl">
+        <operation>
+            <search><![CDATA[
+            	<li><a href="<?php echo $information; ?>"><?php echo $text_information; ?></a></li>
+            	]]>
+            </search>
+            <add position="after"><![CDATA[
+                            <!-- One click order -->
+                            <li><a href="<?php echo $emails_list;  ?>"><?php echo "Emails"; ?></a></li>
+                            <!-- One click order -->
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+</modification>
