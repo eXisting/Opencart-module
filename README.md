@@ -20,3 +20,8 @@ Working with further algortithm:
 * after those actions e-mail message will be in mail boxes of both users ( site admin and customer);
 * also admin panel will show order inside "Catalog/Emails" panel;
 ---
+### Admin panel
+---
+* represents emails list;
+* offer user additional functionality such as delete fast order and set it status;
+---
