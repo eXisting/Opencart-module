@@ -2,6 +2,9 @@
 <div id="content">
   <div class="page-header">
     <div class="container-fluid">
+      <div class="pull-right"><a href="<?php echo $add; ?>" data-toggle="tooltip" title="<?php echo $button_add; ?>" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+        <button type="button" data-toggle="tooltip" title="<?php echo $button_delete; ?>" class="btn btn-danger" onclick="confirm('<?php echo $text_confirm; ?>') ? $('#form-manufacturer').submit() : false;"><i class="fa fa-trash-o"></i></button>
+      </div>
       <h1><?php echo $heading_title; ?></h1>
       <ul class="breadcrumb">
         <?php foreach ($breadcrumbs as $breadcrumb) { ?>
@@ -26,64 +29,42 @@
         <h3 class="panel-title"><i class="fa fa-list"></i> <?php echo $text_list; ?></h3>
       </div>
       <div class="panel-body">
-        <form action="<?php echo $delete; ?>" method="post" enctype="multipart/form-data" id="form-product">
+        <form action="<?php echo $delete; ?>" method="post" enctype="multipart/form-data" id="form-manufacturer">
           <div class="table-responsive">
             <table class="table table-bordered table-hover">
               <thead>
                 <tr>
                   <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
-                  <td class="text-left"><?php echo $column_customer_name; ?></a></td>
-                  <td class="text-left"><?php echo $column_customer_phone; ?></a></td>
-                  <td class="text-left"><?php echo $column_name; ?></a></td>
-                  <td class="text-left"><?php echo $column_product_id; ?></a></td>
-                  <td class="text-left"><?php echo $column_order_price; ?></a></td>
-                  <td class="text-left"><?php echo $column_product_count; ?></a></td>
-                  <td class="text-left"><?php echo $column_subject; ?></a></td>
+                  <td class="text-left"><?php if ($sort == 'name') { ?>
+                    <a href="<?php echo $sort_name; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_name; ?></a>
+                    <?php } else { ?>
+                    <a href="<?php echo $sort_name; ?>"><?php echo $column_name; ?></a>
+                    <?php } ?></td>
+                  <td class="text-right"><?php if ($sort == 'sort_order') { ?>
+                    <a href="<?php echo $sort_sort_order; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_sort_order; ?></a>
+                    <?php } else { ?>
+                    <a href="<?php echo $sort_sort_order; ?>"><?php echo $column_sort_order; ?></a>
+                    <?php } ?></td>
+                  <td class="text-right"><?php echo $column_action; ?></td>
                 </tr>
               </thead>
               <tbody>
-                <?php if ($emails) { ?>
-                <?php foreach ($emails as $email) { ?>
+                <?php if ($manufacturers) { ?>
+                <?php foreach ($manufacturers as $manufacturer) { ?>
                 <tr>
-                  <td class="text-center"><?php if (in_array($email['email_id'], $selected)) { ?>
-                    <input type="checkbox" name="selected[]" value="<?php echo $email['email_id']; ?>" checked="checked" />
+                  <td class="text-center"><?php if (in_array($manufacturer['manufacturer_id'], $selected)) { ?>
+                    <input type="checkbox" name="selected[]" value="<?php echo $manufacturer['manufacturer_id']; ?>" checked="checked" />
                     <?php } else { ?>
-                    <input type="checkbox" name="selected[]" value="<?php echo $email['email_id']; ?>" />
+                    <input type="checkbox" name="selected[]" value="<?php echo $manufacturer['manufacturer_id']; ?>" />
                     <?php } ?></td>
-                    <td class="text-center">
-                        <span>
-                            <?php echo $email['customer_name']; ?>
-                        </span>
-                    </td>
-                    <td>
-                        <span>
-                            <?php echo $email['phone_number']; ?>
-                        </span>
-                    </td>
-                    <td class="text-left"><?php echo $email['email_adress']; ?></td>
-                    <td class="text-center">
-                        <span>
-                            <?php echo $email['product_id']; ?>
-                        </span>
-                    </td>
-                    <td class="text-center">
-                        <span>
-                            <?php echo $email['order_cost']; ?>
-                        </span>
-                    </td>
-                    <td class="text-right"><?php if ($email['product_count'] <= 0) { ?>
-                    <span class="label label-warning"><?php echo $email['product_count']; ?></span>
-                    <?php } elseif ($email['product_count'] <= 5) { ?>
-                    <span class="label label-danger"><?php echo $email['product_count']; ?></span>
-                    <?php } else { ?>
-                    <span class="label label-success"><?php echo $email['product_count']; ?></span>
-                    <?php } ?></td>
-                     <td class="text-left"><?php echo $email['subject']; ?></a></td>
+                  <td class="text-left"><?php echo $manufacturer['name']; ?></td>
+                  <td class="text-right"><?php echo $manufacturer['sort_order']; ?></td>
+                  <td class="text-right"><a href="<?php echo $manufacturer['edit']; ?>" data-toggle="tooltip" title="<?php echo $button_edit; ?>" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>
                 </tr>
                 <?php } ?>
                 <?php } else { ?>
                 <tr>
-                  <td class="text-center" colspan="8"><?php echo $text_no_results; ?></td>
+                  <td class="text-center" colspan="4"><?php echo $text_no_results; ?></td>
                 </tr>
                 <?php } ?>
               </tbody>

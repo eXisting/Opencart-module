@@ -15,6 +15,10 @@ $_['text_option_value']      = 'Option Value';
 $_['text_percent']           = 'Percentage';
 $_['text_amount']            = 'Fixed Amount';
 
+//Orders statuses
+$_['text_processing']        = 'Не обработан';
+$_['text_finished']          = 'Обработан';
+
 // Column
 $_['column_name']               = 'Email';
 $_['column_customer_name']      = 'Name';
@@ -23,6 +27,8 @@ $_['column_product_id']         = 'Product id';
 $_['column_order_price']        = 'Order price';
 $_['column_customer_phone']     = 'Phone';
 $_['column_subject']            = 'Subject';
+$_['column_status']             = 'Status';
+$_['column_action'] 		 	= 'Action';
 
 // Entry
 $_['entry_name']             = 'Email';

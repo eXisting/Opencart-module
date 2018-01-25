@@ -27,16 +27,52 @@ class ModelCatalogEmailsList extends Model {
 		return $email_id;
 	}
 
-    public function getEmail($email_id) {
-		$query = $this->db->query("SELECT DISTINCT *, 
-		(SELECT keyword FROM " . DB_PREFIX . "url_alias 
-		WHERE query = 'email_id=" . (int)$email_id . "') AS keyword ");
+	public function editEmail($email_id, $data) {
+        $sql = "UPDATE " . DB_PREFIX . "emails_list SET 
+        status = '" . $this->db->escape($data['status']) . "'
+        WHERE email_id = '" . (int)$email_id . "'";
 
-		return $query->row;
+        $this->db->query($sql);
+    }
+
+    public function deleteEmail($email_id) {
+        $sql = "DELETE FROM " . DB_PREFIX . "emails_list 
+        WHERE email_id = '" . (int)$email_id . "'";
+
+	    $this->db->query($sql);
+    }
+
+    public function getEmail($email_id) {
+		$sql = "SELECT DISTINCT * FROM " . DB_PREFIX . "emails_list WHERE email_id=" . (int)$email_id;
+		
+        $result = $this->db->query($sql);
+
+		return $result->row;
 	}
 
 	public function getEmails($data = array()) {
-		$sql = "SELECT * FROM " . DB_PREFIX . "emails_list";
+		$sql = "SELECT * FROM " . DB_PREFIX . "emails_list e";
+
+        $sql .= " GROUP BY e.email_id";
+
+        $sort_data = array(
+            'e.customer_name',
+            'e.email_adress',
+            'e.order_cost',
+            'e.status',
+        );
+
+        if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
+            $sql .= " ORDER BY " . $data['sort'];
+        } else {
+            $sql .= " ORDER BY e.customer_name";
+        }
+
+        if (isset($data['order']) && ($data['order'] == 'DESC')) {
+            $sql .= " DESC";
+        } else {
+            $sql .= " ASC";
+        }
 
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
