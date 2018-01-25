@@ -7,5 +7,6 @@ CREATE TABLE IF NOT EXISTS `oc_emails_list` (
       `email_adress` varchar(255) NOT NULL,
       `phone_number`varchar(255) NOT NULL,
       `subject`varchar(255),
+      `status` varchar(255),
       PRIMARY KEY (`email_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
